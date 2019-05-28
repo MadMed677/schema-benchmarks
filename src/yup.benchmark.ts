@@ -30,9 +30,9 @@ interface Report {
 	error?: string;
 }
 
-const Suite = new Benchmark.Suite('yup');
+const BenchmarkSuite = new Benchmark.Suite('yup');
 
-Suite
+BenchmarkSuite
 	.add('RegExp#test', () => {
 		return /o/.test('Hello World!');
 	})
@@ -43,8 +43,9 @@ Suite
 		console.log(String(event.target));
 	})
 	.on('complete', function(benches) {
-		const reports: Array<Report> = benches.currentTarget.map((bench) => {
+		const reports: Array<Report> = benches.currentTarget.map((bench: Benchmark) => {
 			return {
+				// @ts-ignore
 				name: bench.name,
 				hz: bench.hz,
 				rme: bench.stats.rme,
@@ -73,12 +74,13 @@ Suite
 
 		const table = new CliTable(tableDefinition);
 
-		const slowestReportHz = Math.min(...reports.map((report) => report.hz));
-		table.push(...reports.map((report) => {
-			const isSlowertReport = report.hz === slowestReportHz;
+		const slowestSuite: string = this.filter('slowest').map((suite) => suite.name)[0];
 
-			const reportName = ((isSlowertReport) => {
-				if (isSlowertReport) {
+		table.push(...reports.map((report) => {
+			const isSlowestReport = report.name === slowestSuite;
+
+			const reportName = ((isSlowestReport) => {
+				if (isSlowestReport) {
 					return Chalk.redBright(report.name);
 				}
 
@@ -87,7 +89,7 @@ Suite
 				}
 
 				return report.name;
-			})(isSlowertReport);
+			})(isSlowestReport);
 
 			const row = [
 				reportName,

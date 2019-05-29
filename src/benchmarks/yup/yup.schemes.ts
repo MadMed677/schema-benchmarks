@@ -1,6 +1,6 @@
 import {object, string} from 'yup';
 
-export const OrderInfoSimpleRequestScheme = object({
+export const YupSimpleSchema = object({
 	/** Order identificator */
 	id: string().required('required'),
 

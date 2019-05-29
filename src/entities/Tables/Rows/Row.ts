@@ -60,8 +60,6 @@ export class Row {
 			// @ts-ignore
 			this.hz ? Formats.Number(this.hz) : '',
 			// @ts-ignore
-			this.rme ? `± ${Formats.Percentage(this.rme)} %` : '',
-			// @ts-ignore
 			this.size ? Formats.Integer(this.size) : ''
 		];
 	}

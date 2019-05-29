@@ -24,11 +24,19 @@ BenchmarkSuite
 		const request = Mocks.orderInformationRequest.simple.valid;
 
 		if (!request.id) {
-			throw new Error('Field "id" must be present');
+			throw new Error('Field "id" is required');
+		}
+
+		if (typeof request.id !== 'string') {
+			throw new Error('Field "id" is required');
 		}
 
 		if (!request.payerAccount) {
-			throw new Error('Field "payerAccount" must be present');
+			throw new Error('Field "payerAccount" is required');
+		}
+
+		if (typeof request.payerAccount !== 'string') {
+			throw new Error('Field "payerAccount" is required');
 		}
 
 		return true;
@@ -45,6 +53,22 @@ BenchmarkSuite
 		const request = Mocks.orderInformationRequest.simple.valid;
 
 		return OrderInfoSimpleRequestScheme.validate(
+			request,
+			{abortEarly: true}
+		);
+	})
+	.add('simple request#Declarative - sync#abortEarly=false', () => {
+		const request = Mocks.orderInformationRequest.simple.valid;
+
+		return OrderInfoSimpleRequestScheme.validateSync(
+			request,
+			{abortEarly: false}
+		);
+	})
+	.add('simple request#Declarative - sync#abortEarly=true', () => {
+		const request = Mocks.orderInformationRequest.simple.valid;
+
+		return OrderInfoSimpleRequestScheme.validateSync(
 			request,
 			{abortEarly: true}
 		);
@@ -78,7 +102,6 @@ BenchmarkSuite
 			head: [
 				Chalk.blue('Name'),
 				Chalk.yellow('Ops/sec'),
-				Chalk.yellow('MoE'),
 				Chalk.yellow('Runs sampled')
 			],
 			colAligns: columnAligns

@@ -2,7 +2,6 @@ import * as Benchmark from 'benchmark';
 import Chalk from 'chalk';
 
 import {
-	Row,
 	Rows,
 	Table,
 	IReport
@@ -10,7 +9,7 @@ import {
 
 Benchmark.options.minSamples = 1;
 
-const BenchmarkSuite = new Benchmark.Suite('yup');
+const YupBenchmarkSuite = new Benchmark.Suite('yup');
 
 import * as Mocks from './mocks';
 
@@ -19,7 +18,7 @@ import {
 } from './yup.schemes';
 import {Event} from 'benchmark';
 
-BenchmarkSuite
+const yupBenchmarkSuite = YupBenchmarkSuite
 	.add('simple request#Imperative', () => {
 		const request = Mocks.orderInformationRequest.simple.valid;
 
@@ -134,6 +133,8 @@ BenchmarkSuite
 		console.log('--- ', Chalk.greenBright('Fastest'), ' ---');
 		console.log();
 	})
-	// run async
-	.run({ 'async': true })
 ;
+
+export {
+	yupBenchmarkSuite
+};

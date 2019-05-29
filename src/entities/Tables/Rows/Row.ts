@@ -17,6 +17,9 @@ interface RowOptions {
 		/** The number of executions per second */
 		hz?: number;
 
+		/** How much slower than fastest item */
+		stf?: number;
+
 		/** The relative margin of error */
 		rme?: number;
 
@@ -34,6 +37,7 @@ export class Row {
 		this.name = options.values.name;
 		this.hz = options.values.hz;
 		this.rme = options.values.rme;
+		this.stf = options.values.stf;
 		this.size = options.values.size;
 		this.error = options.values.error;
 	}
@@ -47,6 +51,9 @@ export class Row {
 	/** The relative margin of error */
 	private readonly rme?: number;
 
+	/** How much slower than fastest item */
+	private readonly stf?: number;
+
 	/** Array of count sampled periods */
 	private readonly size?: number;
 
@@ -59,6 +66,8 @@ export class Row {
 			this.name,
 			// @ts-ignore
 			this.hz ? Formats.Number(this.hz) : '',
+			// @ts-ignore
+			this.stf ? `x${Formats.Number(this.stf)}` : '-',
 			// @ts-ignore
 			this.size ? Formats.Integer(this.size) : ''
 		];

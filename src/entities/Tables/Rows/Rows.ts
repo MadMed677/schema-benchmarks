@@ -29,27 +29,29 @@ export class Rows {
 			// @ts-ignore suite has property "name"
 			const isFastestReport = Boolean(this.suites.fastest) && report.name === this.suites.fastest.name;
 
-			const reportName = ((isSlowestReport, isFastestReport) => {
+			const colorize = ((isSlowestReport, isFastestReport) => {
 				if (isSlowestReport) {
-					return Chalk.redBright(report.name);
+					return Chalk.redBright;
 				}
 
 				if (isFastestReport) {
-					return Chalk.greenBright(report.name);
+					return Chalk.greenBright;
 				}
 
 				if (report.error) {
-					return Chalk.redBright(report.name);
+					return Chalk.redBright;
 				}
 
-				return report.name;
+				return (value) => value;
 			})(isSlowestReport, isFastestReport);
 
 			return new Row({
 				values: {
-					name: reportName,
+					name: colorize(report.name),
 					hz: report.hz,
 					rme: report.rme,
+					// @ts-ignore
+					stf: isFastestReport ? 0 : this.suites.fastest.hz / report.hz,
 					size: report.size,
 					error: report.error
 				}

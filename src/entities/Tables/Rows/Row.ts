@@ -15,13 +15,13 @@ interface RowOptions {
 		name: string;
 
 		/** The number of executions per second */
-		hz: number;
+		hz?: number;
 
 		/** The relative margin of error */
-		rme: number;
+		rme?: number;
 
 		/** Array of count sampled periods */
-		size: number;
+		size?: number;
 
 		/** Row errors */
 		error?: string;
@@ -42,27 +42,27 @@ export class Row {
 	private readonly name: string;
 
 	/** The number of executions per second */
-	private readonly hz: number;
+	private readonly hz?: number;
 
 	/** The relative margin of error */
-	private readonly rme: number;
+	private readonly rme?: number;
 
 	/** Array of count sampled periods */
-	private readonly size: number;
+	private readonly size?: number;
 
 	/** Row errors */
-	private readonly error: string | undefined;
+	private readonly error?: string;
 
 	/** Get table row */
 	public toJSON() {
 		return [
 			this.name,
 			// @ts-ignore
-			Formats.Number(this.hz),
+			this.hz ? Formats.Number(this.hz) : '',
 			// @ts-ignore
-			`± ${Formats.Percentage(this.rme)} %`,
+			this.rme ? `± ${Formats.Percentage(this.rme)} %` : '',
 			// @ts-ignore
-			Formats.Integer(this.size)
+			this.size ? Formats.Integer(this.size) : ''
 		];
 	}
 }

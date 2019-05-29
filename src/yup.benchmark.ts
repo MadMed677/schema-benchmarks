@@ -1,37 +1,56 @@
 import * as Benchmark from 'benchmark';
 import Chalk from 'chalk';
-// @ts-ignore
-import * as CliTable from 'cli-table';
-import * as D3 from 'd3-format';
 
 import {
+	Row,
 	Rows,
 	Table,
 	IReport
 } from './entities';
-import {Suite} from 'benchmark';
-
-enum Formats {
-	// @ts-ignore
-	Number = D3.format(',d'),
-	// @ts-ignore
-	Percentage = D3.format('.2f'),
-	// @ts-ignore
-	Integer = D3.format(',')
-}
 
 Benchmark.options.minSamples = 1;
 
 const BenchmarkSuite = new Benchmark.Suite('yup');
 
+import * as Mocks from './mocks';
+
+import {
+	OrderInfoSimpleRequestScheme
+} from './yup.schemes';
+import {Event} from 'benchmark';
+
 BenchmarkSuite
-	.add('RegExp#test', () => {
-		return /o/.test('Hello World!');
+	.add('simple request#Imperative', () => {
+		const request = Mocks.orderInformationRequest.simple.valid;
+
+		if (!request.id) {
+			throw new Error('Field "id" must be present');
+		}
+
+		if (!request.payerAccount) {
+			throw new Error('Field "payerAccount" must be present');
+		}
+
+		return true;
 	})
-	.add('String#indexOf', () => {
-		return 'Hello World!'.indexOf('o') > -1;
+	.add('simple request#Declarative - async#abortEarly=false', () => {
+		const request = Mocks.orderInformationRequest.simple.valid;
+
+		return OrderInfoSimpleRequestScheme.validate(
+			request,
+			{abortEarly: false}
+		);
 	})
-	.on('cycle', (event) => {
+	.add('simple request#Declarative - async#abortEarly=true', () => {
+		const request = Mocks.orderInformationRequest.simple.valid;
+
+		return OrderInfoSimpleRequestScheme.validate(
+			request,
+			{abortEarly: true}
+		);
+	})
+	.on('cycle', (event: Event) => {
+		console.log('event.target: ', event.target);
 		console.log(String(event.target));
 	})
 	.on('complete', function(benches) {
@@ -64,7 +83,7 @@ BenchmarkSuite
 			colAligns: columnAligns
 		};
 
-		const slowestSuite: Suite = this.filter('slowest')[0];
+		const slowestSuite: Benchmark.Suite = this.filter('slowest')[0];
 
 		const table = new Table({
 			definitions: tableDefinition,
@@ -76,8 +95,10 @@ BenchmarkSuite
 			})
 		});
 
-		console.log('Fastest is ' + this.filter('fastest').map('name'));
-		console.log(table.getTable().toString());
+		console.log('Fastest is ' + (this as Benchmark.Suite).filter('fastest').map((suite) => suite.name));
+		const cliTable = table.addRow(new Row({values: {name: 'Yup'}})).getTable();
+
+		console.log(cliTable.toString());
 	})
 	// run async
 	.run({ 'async': true })

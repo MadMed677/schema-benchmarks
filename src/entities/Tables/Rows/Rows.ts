@@ -6,7 +6,8 @@ import Chalk from 'chalk';
 interface RowsOptions {
 	reports: Array<IReport>;
 	suites: {
-		slowest: Suite;
+		slowest?: Suite;
+		fastest?: Suite;
 	}
 }
 
@@ -23,11 +24,18 @@ export class Rows {
 	private getAllRows(): Array<Row> {
 		return this.reports.map((report) => {
 			// @ts-ignore suite has property "name"
-			const isSlowestReport = report.name === this.suites.slowest.name;
+			const isSlowestReport = Boolean(this.suites.slowest) && report.name === this.suites.slowest.name;
 
-			const reportName = ((isSlowestReport) => {
+			// @ts-ignore suite has property "name"
+			const isFastestReport = Boolean(this.suites.fastest) && report.name === this.suites.fastest.name;
+
+			const reportName = ((isSlowestReport, isFastestReport) => {
 				if (isSlowestReport) {
 					return Chalk.redBright(report.name);
+				}
+
+				if (isFastestReport) {
+					return Chalk.greenBright(report.name);
 				}
 
 				if (report.error) {
@@ -35,7 +43,7 @@ export class Rows {
 				}
 
 				return report.name;
-			})(isSlowestReport);
+			})(isSlowestReport, isFastestReport);
 
 			return new Row({
 				values: {

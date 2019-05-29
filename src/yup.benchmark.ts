@@ -50,8 +50,9 @@ BenchmarkSuite
 		);
 	})
 	.on('cycle', (event: Event) => {
-		console.log('event.target: ', event.target);
-		console.log(String(event.target));
+		const benchmark = event.target as Benchmark;
+
+		console.log(String(benchmark));
 	})
 	.on('complete', function(benches) {
 		const reports: Array<IReport> = benches.currentTarget.map((bench: Benchmark) => {
@@ -84,21 +85,30 @@ BenchmarkSuite
 		};
 
 		const slowestSuite: Benchmark.Suite = this.filter('slowest')[0];
+		const fastestSuite: Benchmark.Suite = this.filter('fastest')[0];
 
 		const table = new Table({
 			definitions: tableDefinition,
 			rows: new Rows({
 				suites: {
-					slowest: slowestSuite
+					slowest: slowestSuite,
+					fastest: fastestSuite
 				},
 				reports: reports
 			})
 		});
 
-		console.log('Fastest is ' + (this as Benchmark.Suite).filter('fastest').map((suite) => suite.name));
-		const cliTable = table.addRow(new Row({values: {name: 'Yup'}})).getTable();
+		const cliTable = table
+			.getTable()
+		;
 
+		console.log();
+		console.log('----- ', Chalk.cyanBright('Yup'), ' -----');
 		console.log(cliTable.toString());
+
+		console.log('--- ', Chalk.redBright('Slowest'), ' ---');
+		console.log('--- ', Chalk.greenBright('Fastest'), ' ---');
+		console.log();
 	})
 	// run async
 	.run({ 'async': true })

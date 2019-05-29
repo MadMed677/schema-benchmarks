@@ -51,7 +51,7 @@ export class Row {
 	/** The relative margin of error */
 	private readonly rme?: number;
 
-	/** How much slower than fastest item */
+	/** How much slower than fastest item (in percent) */
 	private readonly stf?: number;
 
 	/** Array of count sampled periods */
@@ -67,7 +67,7 @@ export class Row {
 			// @ts-ignore
 			this.hz ? Formats.Number(this.hz) : '',
 			// @ts-ignore
-			this.stf ? `x${Formats.Number(this.stf)}` : '-',
+			this.stf ? `${Formats.Percentage(this.stf)}%` : '-',
 			// @ts-ignore
 			this.size ? Formats.Integer(this.size) : ''
 		];

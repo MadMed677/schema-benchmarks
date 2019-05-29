@@ -115,7 +115,7 @@ BenchmarkSuite
 			head: [
 				Chalk.blue('Name'),
 				Chalk.yellow('Ops/sec'),
-				Chalk.yellow('Slower than fastest'),
+				Chalk.yellow('% of max'),
 				Chalk.yellow('Runs sampled')
 			],
 			colAligns: columnAligns

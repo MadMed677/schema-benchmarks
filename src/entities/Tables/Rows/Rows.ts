@@ -51,7 +51,7 @@ export class Rows {
 					hz: report.hz,
 					rme: report.rme,
 					// @ts-ignore
-					stf: isFastestReport ? 0 : this.suites.fastest.hz / report.hz,
+					stf: isFastestReport ? 100 :  report.hz * 100 / 128282727,
 					size: report.size,
 					error: report.error
 				}

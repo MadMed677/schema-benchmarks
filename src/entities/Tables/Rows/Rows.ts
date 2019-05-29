@@ -51,7 +51,7 @@ export class Rows {
 					hz: report.hz,
 					rme: report.rme,
 					// @ts-ignore
-					stf: isFastestReport ? 100 :  report.hz * 100 / 128282727,
+					stf: isFastestReport ? 100 :  report.hz / 128282727 * 100,
 					size: report.size,
 					error: report.error
 				}

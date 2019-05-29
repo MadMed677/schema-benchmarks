@@ -10,8 +10,6 @@ import {
 	IReport
 } from './entities';
 
-Benchmark.options.minSamples = 1;
-
 import {Event} from 'benchmark';
 import {YupSimpleSchema} from './benchmarks/yup/yup.schemes';
 import {JoiSimpleSchema} from './benchmarks/joi/joi.schemes';
@@ -38,12 +36,20 @@ BenchmarkSuite
 
 		return true;
 	})
-	.add('simple#Yup / Async', () => {
+	.add('simple#Yup / Async / isValid', () => {
 		const request = Mocks.orderInformationRequest.simple.valid;
 
 		return YupSimpleSchema.validate(
 			request,
 			{abortEarly: false}
+		);
+	})
+	.add('simple#Yup / Async / isValid / AbourtEarly', () => {
+		const request = Mocks.orderInformationRequest.simple.valid;
+
+		return YupSimpleSchema.isValid(
+			request,
+			{abortEarly: true}
 		);
 	})
 	.add('simple#Yup / Async / AbortEarly', () => {
@@ -52,6 +58,14 @@ BenchmarkSuite
 		return YupSimpleSchema.validate(
 			request,
 			{abortEarly: true}
+		);
+	})
+	.add('simple#Yup / Sync / isValid', () => {
+		const request = Mocks.orderInformationRequest.simple.valid;
+
+		return YupSimpleSchema.isValidSync(
+			request,
+			{abortEarly: false}
 		);
 	})
 	.add('simple#Yup / Sync', () => {

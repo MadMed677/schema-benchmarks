@@ -11,7 +11,10 @@ import {
 } from './entities';
 
 import {Event} from 'benchmark';
-import {YupSimpleSchema} from './benchmarks/yup/yup.schemes';
+import {
+	YupSimpleSchema,
+	YupDependsSchema
+} from './benchmarks/yup';
 import {JoiSimpleSchema} from './benchmarks/joi/joi.schemes';
 
 BenchmarkSuite
@@ -44,7 +47,7 @@ BenchmarkSuite
 			{abortEarly: false}
 		);
 	})
-	.add('simple#Yup / Async / isValid / AbourtEarly', () => {
+	.add('simple#Yup / Async / isValid / AbortEarly', () => {
 		const request = Mocks.orderInformationRequest.simple.valid;
 
 		return YupSimpleSchema.isValid(
@@ -52,7 +55,15 @@ BenchmarkSuite
 			{abortEarly: true}
 		);
 	})
-	.add('simple#Yup / Async / AbortEarly', () => {
+	.add('simple#Yup / Async / validate', () => {
+		const request = Mocks.orderInformationRequest.simple.valid;
+
+		return YupSimpleSchema.validate(
+			request,
+			{abortEarly: false}
+		);
+	})
+	.add('simple#Yup / Async / validate / AbortEarly', () => {
 		const request = Mocks.orderInformationRequest.simple.valid;
 
 		return YupSimpleSchema.validate(
@@ -68,7 +79,7 @@ BenchmarkSuite
 			{abortEarly: false}
 		);
 	})
-	.add('simple#Yup / Sync', () => {
+	.add('simple#Yup / Sync / validate', () => {
 		const request = Mocks.orderInformationRequest.simple.valid;
 
 		return YupSimpleSchema.validateSync(
@@ -76,7 +87,7 @@ BenchmarkSuite
 			{abortEarly: false}
 		);
 	})
-	.add('simple#Yup / Sync / AbortEarly', () => {
+	.add('simple#Yup / Sync / validate / AbortEarly', () => {
 		const request = Mocks.orderInformationRequest.simple.valid;
 
 		return YupSimpleSchema.validateSync(
@@ -84,7 +95,7 @@ BenchmarkSuite
 			{abortEarly: true}
 		);
 	})
-	.add('simple#Joi / Async', () => {
+	.add('simple#Joi / Async / validate', () => {
 		const request = Mocks.orderInformationRequest.simple.valid;
 
 		return JoiSimpleSchema.validate(
@@ -92,10 +103,98 @@ BenchmarkSuite
 			{abortEarly: false}
 		);
 	})
-	.add('simple#Joi / Async / AbortEarly', () => {
+	.add('simple#Joi / Async / validate / AbortEarly', () => {
 		const request = Mocks.orderInformationRequest.simple.valid;
 
 		return JoiSimpleSchema.validate(
+			request,
+			{abortEarly: true}
+		);
+	})
+	.add('depends#Imperative', () => {
+		const request = Mocks.orderInformationRequest.depends.offline;
+
+		if (!request.payMethod) {
+			throw new Error('Field "payMethod" is required');
+		}
+
+		if (request.payMethod === 'offline') {
+			if (!request.phoneNumber) {
+				throw new Error('Field "phoneNumber" is required');
+			}
+
+			const phoneNumberWithoutSymbols = request.phoneNumber.replace(/\D/g, '');
+			const ALLOWED_PHONE_NUMBER_LENGTH = 11;
+
+			const isAllowedPhoneNumber = phoneNumberWithoutSymbols.length === ALLOWED_PHONE_NUMBER_LENGTH;
+
+			if (!isAllowedPhoneNumber) {
+				throw new Error('Field "phoneNumber" is not valid');
+			}
+		}
+
+		return true;
+	})
+	.add('depends#Yup / Async / isValid', () => {
+		const request = Mocks.orderInformationRequest.depends.offline;
+
+		return YupDependsSchema.isValid(
+			request,
+			{abortEarly: false}
+		);
+	})
+	.add('depends#Yup / Async / isValid / AbortEarly', () => {
+		const request = Mocks.orderInformationRequest.depends.offline;
+
+		return YupDependsSchema.isValid(
+			request,
+			{abortEarly: true}
+		);
+	})
+	.add('depends#Yup / Async / validate', () => {
+		const request = Mocks.orderInformationRequest.depends.offline;
+
+		return YupDependsSchema.validate(
+			request,
+			{abortEarly: false}
+		);
+	})
+	.add('depends#Yup / Async / validate / AbortEarly', () => {
+		const request = Mocks.orderInformationRequest.depends.offline;
+
+		return YupDependsSchema.validate(
+			request,
+			{abortEarly: true}
+		);
+	})
+	.add('depends#Yup / Sync / isValid', () => {
+		const request = Mocks.orderInformationRequest.depends.offline;
+
+		return YupDependsSchema.isValidSync(
+			request,
+			{abortEarly: false}
+		);
+	})
+	.add('depends#Yup / Sync / isValid / AbortEarly', () => {
+		const request = Mocks.orderInformationRequest.depends.offline;
+
+		return YupDependsSchema.isValidSync(
+			request,
+			{abortEarly: true}
+		);
+	})
+	.add('depends#Yup / Sync / validate', () => {
+		const request = Mocks.orderInformationRequest.depends.offline;
+
+		return YupDependsSchema.validateSync(
+			request,
+			{abortEarly: false}
+		);
+	})
+	.add('depends#Yup / Sync / validate / AbortEarly', () => {
+		const request = Mocks.orderInformationRequest.depends.offline;
+
+		return YupDependsSchema.validateSync(
 			request,
 			{abortEarly: true}
 		);

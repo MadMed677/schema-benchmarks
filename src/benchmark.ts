@@ -19,7 +19,71 @@ import {
 import {JoiSimpleSchema} from './benchmarks/joi/joi.schemes';
 
 BenchmarkSuite
-	.add('simple#Imperative', () => {
+	.add('Yup#simple / Async / validate', () => {
+		const request = Mocks.orderInformationRequest.simple.valid;
+
+		return YupSimpleSchema.validate(
+			request,
+			{abortEarly: false}
+		);
+	})
+	.add('Yup#simple / Async / validate / AbortEarly', () => {
+		const request = Mocks.orderInformationRequest.simple.valid;
+
+		return YupSimpleSchema.validate(
+			request,
+			{abortEarly: true}
+		);
+	})
+	.add('Yup#simple / Sync / validate', () => {
+		const request = Mocks.orderInformationRequest.simple.valid;
+
+		return YupSimpleSchema.validateSync(
+			request,
+			{abortEarly: false}
+		);
+	})
+	.add('Yup#simple / Sync / validate / AbortEarly', () => {
+		const request = Mocks.orderInformationRequest.simple.valid;
+
+		return YupSimpleSchema.validateSync(
+			request,
+			{abortEarly: true}
+		);
+	})
+	.add('Yup#depends / Async / validate', () => {
+		const request = Mocks.orderInformationRequest.depends.offline;
+
+		return YupDependsSchema.validate(
+			request,
+			{abortEarly: false}
+		);
+	})
+	.add('Yup#depends / Async / validate / AbortEarly', () => {
+		const request = Mocks.orderInformationRequest.depends.offline;
+
+		return YupDependsSchema.validate(
+			request,
+			{abortEarly: true}
+		);
+	})
+	.add('Yup#depends / Sync / validate', () => {
+		const request = Mocks.orderInformationRequest.depends.offline;
+
+		return YupDependsSchema.validateSync(
+			request,
+			{abortEarly: false}
+		);
+	})
+	.add('Yup#depends / Sync / validate / AbortEarly', () => {
+		const request = Mocks.orderInformationRequest.depends.offline;
+
+		return YupDependsSchema.validateSync(
+			request,
+			{abortEarly: true}
+		);
+	})
+	.add('Imperative#simple', () => {
 		const request = Mocks.orderInformationRequest.simple.valid;
 
 		if (!request.id) {
@@ -40,76 +104,7 @@ BenchmarkSuite
 
 		return true;
 	})
-	.add('simple#Validator', () => {
-		const request = Mocks.orderInformationRequest.simple.valid;
-
-		if (!request.id) {
-			throw new Error('Field "id" is required');
-		}
-
-		if (Validator.isEmpty(request.id)) {
-			throw new Error('Field "id" is required');
-		}
-
-		if (!request.payerAccount) {
-			throw new Error('Field "payerAccount" is required');
-		}
-
-		if (Validator.isEmpty(request.payerAccount)) {
-			throw new Error('Field "payerAccount" is required');
-		}
-
-		return true;
-	})
-	.add('simple#Yup / Async / validate', () => {
-		const request = Mocks.orderInformationRequest.simple.valid;
-
-		return YupSimpleSchema.validate(
-			request,
-			{abortEarly: false}
-		);
-	})
-	.add('simple#Yup / Async / validate / AbortEarly', () => {
-		const request = Mocks.orderInformationRequest.simple.valid;
-
-		return YupSimpleSchema.validate(
-			request,
-			{abortEarly: true}
-		);
-	})
-	.add('simple#Yup / Sync / validate', () => {
-		const request = Mocks.orderInformationRequest.simple.valid;
-
-		return YupSimpleSchema.validateSync(
-			request,
-			{abortEarly: false}
-		);
-	})
-	.add('simple#Yup / Sync / validate / AbortEarly', () => {
-		const request = Mocks.orderInformationRequest.simple.valid;
-
-		return YupSimpleSchema.validateSync(
-			request,
-			{abortEarly: true}
-		);
-	})
-	.add('simple#Joi / Async / validate', () => {
-		const request = Mocks.orderInformationRequest.simple.valid;
-
-		return JoiSimpleSchema.validate(
-			request,
-			{abortEarly: false}
-		);
-	})
-	.add('simple#Joi / Async / validate / AbortEarly', () => {
-		const request = Mocks.orderInformationRequest.simple.valid;
-
-		return JoiSimpleSchema.validate(
-			request,
-			{abortEarly: true}
-		);
-	})
-	.add('depends#Imperative', () => {
+	.add('#Imperative#depends', () => {
 		const request = Mocks.orderInformationRequest.depends.offline;
 
 		if (!request.payMethod) {
@@ -133,7 +128,28 @@ BenchmarkSuite
 
 		return true;
 	})
-	.add('depends#Validator', () => {
+	.add('Validator#simple', () => {
+		const request = Mocks.orderInformationRequest.simple.valid;
+
+		if (!request.id) {
+			throw new Error('Field "id" is required');
+		}
+
+		if (Validator.isEmpty(request.id)) {
+			throw new Error('Field "id" is required');
+		}
+
+		if (!request.payerAccount) {
+			throw new Error('Field "payerAccount" is required');
+		}
+
+		if (Validator.isEmpty(request.payerAccount)) {
+			throw new Error('Field "payerAccount" is required');
+		}
+
+		return true;
+	})
+	.add('Validator#depends', () => {
 		const request = Mocks.orderInformationRequest.depends.offline;
 
 		if (request.payMethod === 'offline') {
@@ -144,34 +160,18 @@ BenchmarkSuite
 
 		return true;
 	})
-	.add('depends#Yup / Async / validate', () => {
-		const request = Mocks.orderInformationRequest.depends.offline;
+	.add('Joi#simple / Async / validate', () => {
+		const request = Mocks.orderInformationRequest.simple.valid;
 
-		return YupDependsSchema.validate(
+		return JoiSimpleSchema.validate(
 			request,
 			{abortEarly: false}
 		);
 	})
-	.add('depends#Yup / Async / validate / AbortEarly', () => {
-		const request = Mocks.orderInformationRequest.depends.offline;
+	.add('Joi#simple / Async / validate / AbortEarly', () => {
+		const request = Mocks.orderInformationRequest.simple.valid;
 
-		return YupDependsSchema.validate(
-			request,
-			{abortEarly: true}
-		);
-	})
-	.add('depends#Yup / Sync / validate', () => {
-		const request = Mocks.orderInformationRequest.depends.offline;
-
-		return YupDependsSchema.validateSync(
-			request,
-			{abortEarly: false}
-		);
-	})
-	.add('depends#Yup / Sync / validate / AbortEarly', () => {
-		const request = Mocks.orderInformationRequest.depends.offline;
-
-		return YupDependsSchema.validateSync(
+		return JoiSimpleSchema.validate(
 			request,
 			{abortEarly: true}
 		);

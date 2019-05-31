@@ -15,7 +15,7 @@ export const JoiSimpleSchema = object({
 
 export const JoiEmailSchema = object({
 	payMethod: string().required(),
-	phoneNumber: string().when('payMethod', {
+	email: string().when('payMethod', {
 		is: PayMethods.Offline,
 		then: string().email()
 	})

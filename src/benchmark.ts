@@ -174,7 +174,7 @@ SimpleBenchmarkSuite
 
 DependsBenchmarkSuite
 	.add('Imperative', () => {
-		const request = Mocks.orderInformationRequest.depends.offline;
+		const request = Mocks.orderInformationRequest.phone.offline;
 
 		if (!request.payMethod) {
 			throw new Error('Field "payMethod" is required');
@@ -198,7 +198,7 @@ DependsBenchmarkSuite
 		return true;
 	})
 	.add('Validator', () => {
-		const request = Mocks.orderInformationRequest.depends.offline;
+		const request = Mocks.orderInformationRequest.phone.offline;
 
 		if (request.payMethod === 'offline') {
 			const phoneNumberWithoutSymbols = request.phoneNumber.replace(/\D/g, '');
@@ -209,7 +209,7 @@ DependsBenchmarkSuite
 		return true;
 	})
 	.add('Yup / Async / validate', () => {
-		const request = Mocks.orderInformationRequest.depends.offline;
+		const request = Mocks.orderInformationRequest.phone.offline;
 
 		return YupDependsSchema.validate(
 			request,
@@ -217,7 +217,7 @@ DependsBenchmarkSuite
 		);
 	})
 	.add('Yup / Async / validate / AbortEarly', () => {
-		const request = Mocks.orderInformationRequest.depends.offline;
+		const request = Mocks.orderInformationRequest.phone.offline;
 
 		return YupDependsSchema.validate(
 			request,
@@ -225,7 +225,7 @@ DependsBenchmarkSuite
 		);
 	})
 	.add('Yup / Sync / validate', () => {
-		const request = Mocks.orderInformationRequest.depends.offline;
+		const request = Mocks.orderInformationRequest.phone.offline;
 
 		return YupDependsSchema.validateSync(
 			request,
@@ -233,7 +233,7 @@ DependsBenchmarkSuite
 		);
 	})
 	.add('Yup / Sync / validate / AbortEarly', () => {
-		const request = Mocks.orderInformationRequest.depends.offline;
+		const request = Mocks.orderInformationRequest.phone.offline;
 
 		return YupDependsSchema.validateSync(
 			request,

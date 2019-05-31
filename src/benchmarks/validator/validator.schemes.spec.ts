@@ -3,7 +3,7 @@ import * as Mocks from '../../mocks';
 
 describe('Validator', () => {
 	test('should validate phoneNumber', () => {
-		const request = Mocks.orderInformationRequest.depends.offline;
+		const request = Mocks.orderInformationRequest.phone.offline;
 
 		if (request.payMethod === 'offline') {
 			const phoneNumberWithoutSymbols = request.phoneNumber.replace(/\D/g, '');

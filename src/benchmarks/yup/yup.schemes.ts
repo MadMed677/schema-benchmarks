@@ -32,3 +32,11 @@ export const YupDependsSchema = object({
 			})
 	})
 });
+
+export const YupEmailSchema = object({
+	payMethod: string().required('required'),
+	email: string().when('payMethod', {
+		is: PayMethods.Offline,
+		then: string().email('not-valid').required('required')
+	})
+});

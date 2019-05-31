@@ -5,13 +5,23 @@ export const orderInformationRequest = {
 			payerAccount: '2461837451559116101'
 		}
 	},
-	depends: {
+	phone: {
 		online: {
 			payMethod: 'online'
 		},
 		offline: {
 			payMethod: 'offline',
 			phoneNumber: '+7 (921) 111 22 33'
+		}
+	},
+	email: {
+		valid: {
+			payMethod: 'offline',
+			email: 'mytest@mail.com'
+		},
+		invalid: {
+			payMethod: 'offline',
+			email: 'invalid_email@m'
 		}
 	}
 };

@@ -1,6 +1,7 @@
 import Chalk from 'chalk';
 import * as Mocks from './mocks';
 import * as Benchmark from 'benchmark';
+import * as Validator from 'validator';
 
 const BenchmarkSuite = new Benchmark.Suite('Benchmark');
 
@@ -39,21 +40,26 @@ BenchmarkSuite
 
 		return true;
 	})
-	.add('simple#Yup / Async / isValid', () => {
+	.add('simple#Validator', () => {
 		const request = Mocks.orderInformationRequest.simple.valid;
 
-		return YupSimpleSchema.validate(
-			request,
-			{abortEarly: false}
-		);
-	})
-	.add('simple#Yup / Async / isValid / AbortEarly', () => {
-		const request = Mocks.orderInformationRequest.simple.valid;
+		if (!request.id) {
+			throw new Error('Field "id" is required');
+		}
 
-		return YupSimpleSchema.isValid(
-			request,
-			{abortEarly: true}
-		);
+		if (Validator.isEmpty(request.id)) {
+			throw new Error('Field "id" is required');
+		}
+
+		if (!request.payerAccount) {
+			throw new Error('Field "payerAccount" is required');
+		}
+
+		if (Validator.isEmpty(request.payerAccount)) {
+			throw new Error('Field "payerAccount" is required');
+		}
+
+		return true;
 	})
 	.add('simple#Yup / Async / validate', () => {
 		const request = Mocks.orderInformationRequest.simple.valid;
@@ -69,14 +75,6 @@ BenchmarkSuite
 		return YupSimpleSchema.validate(
 			request,
 			{abortEarly: true}
-		);
-	})
-	.add('simple#Yup / Sync / isValid', () => {
-		const request = Mocks.orderInformationRequest.simple.valid;
-
-		return YupSimpleSchema.isValidSync(
-			request,
-			{abortEarly: false}
 		);
 	})
 	.add('simple#Yup / Sync / validate', () => {
@@ -135,21 +133,16 @@ BenchmarkSuite
 
 		return true;
 	})
-	.add('depends#Yup / Async / isValid', () => {
+	.add('depends#Validator', () => {
 		const request = Mocks.orderInformationRequest.depends.offline;
 
-		return YupDependsSchema.isValid(
-			request,
-			{abortEarly: false}
-		);
-	})
-	.add('depends#Yup / Async / isValid / AbortEarly', () => {
-		const request = Mocks.orderInformationRequest.depends.offline;
+		if (request.payMethod === 'offline') {
+			const phoneNumberWithoutSymbols = request.phoneNumber.replace(/\D/g, '');
 
-		return YupDependsSchema.isValid(
-			request,
-			{abortEarly: true}
-		);
+			return Validator.isMobilePhone(phoneNumberWithoutSymbols, 'ru-RU');
+		}
+
+		return true;
 	})
 	.add('depends#Yup / Async / validate', () => {
 		const request = Mocks.orderInformationRequest.depends.offline;
@@ -163,22 +156,6 @@ BenchmarkSuite
 		const request = Mocks.orderInformationRequest.depends.offline;
 
 		return YupDependsSchema.validate(
-			request,
-			{abortEarly: true}
-		);
-	})
-	.add('depends#Yup / Sync / isValid', () => {
-		const request = Mocks.orderInformationRequest.depends.offline;
-
-		return YupDependsSchema.isValidSync(
-			request,
-			{abortEarly: false}
-		);
-	})
-	.add('depends#Yup / Sync / isValid / AbortEarly', () => {
-		const request = Mocks.orderInformationRequest.depends.offline;
-
-		return YupDependsSchema.isValidSync(
 			request,
 			{abortEarly: true}
 		);
@@ -253,7 +230,7 @@ BenchmarkSuite
 		;
 
 		console.log();
-		console.log('----- ', Chalk.cyanBright('"Yup" and "Joi" modules'), ' -----');
+		console.log('----- ', Chalk.cyanBright('"Yup" / "Joi" / "Validator" modules'), ' -----');
 		console.log(cliTable.toString());
 
 		console.log('--- ', Chalk.redBright('Slowest'), ' ---');

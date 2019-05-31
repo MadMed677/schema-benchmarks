@@ -1,4 +1,5 @@
 export {
+	YupEmailSchema,
+	YupPhoneSchema,
 	YupSimpleSchema,
-	YupDependsSchema
 } from './yup.schemes';

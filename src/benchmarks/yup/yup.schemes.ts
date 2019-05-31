@@ -13,7 +13,7 @@ enum PayMethods {
 	Online = 'online'
 }
 
-export const YupDependsSchema = object({
+export const YupPhoneSchema = object({
 	payMethod: string().required('required'),
 	phoneNumber: string().when('payMethod', {
 		is: PayMethods.Offline,

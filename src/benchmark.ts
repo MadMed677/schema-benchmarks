@@ -4,7 +4,7 @@ import * as Benchmark from 'benchmark';
 import * as Validator from 'validator';
 
 const SimpleBenchmarkSuite = new Benchmark.Suite('Simple');
-const DependsBenchmarkSuite = new Benchmark.Suite('Depends');
+const PhoneBenchmarkSuite = new Benchmark.Suite('Phone');
 const EmailBenchmarkSuite = new Benchmark.Suite('Email');
 
 import {
@@ -15,10 +15,14 @@ import {
 
 import {Event} from 'benchmark';
 import {
+	YupEmailSchema,
+	YupPhoneSchema,
 	YupSimpleSchema,
-	YupDependsSchema
 } from './benchmarks/yup';
-import {JoiSimpleSchema} from './benchmarks/joi/joi.schemes';
+import {
+	JoiEmailSchema,
+	JoiSimpleSchema
+} from './benchmarks/joi/joi.schemes';
 
 console.log();
 console.log('----- ', Chalk.cyanBright('"Yup" / "Joi" / "Validator" modules'), ' -----');
@@ -173,7 +177,7 @@ SimpleBenchmarkSuite
 	.run({async: true})
 ;
 
-DependsBenchmarkSuite
+PhoneBenchmarkSuite
 	.add('Imperative', () => {
 		const request = Mocks.orderInformationRequest.phone.offline;
 
@@ -212,7 +216,7 @@ DependsBenchmarkSuite
 	.add('Yup / Async / validate', () => {
 		const request = Mocks.orderInformationRequest.phone.offline;
 
-		return YupDependsSchema.validate(
+		return YupPhoneSchema.validate(
 			request,
 			{abortEarly: false}
 		);
@@ -220,7 +224,7 @@ DependsBenchmarkSuite
 	.add('Yup / Async / validate / AbortEarly', () => {
 		const request = Mocks.orderInformationRequest.phone.offline;
 
-		return YupDependsSchema.validate(
+		return YupPhoneSchema.validate(
 			request,
 			{abortEarly: true}
 		);
@@ -228,7 +232,7 @@ DependsBenchmarkSuite
 	.add('Yup / Sync / validate', () => {
 		const request = Mocks.orderInformationRequest.phone.offline;
 
-		return YupDependsSchema.validateSync(
+		return YupPhoneSchema.validateSync(
 			request,
 			{abortEarly: false}
 		);
@@ -236,7 +240,7 @@ DependsBenchmarkSuite
 	.add('Yup / Sync / validate / AbortEarly', () => {
 		const request = Mocks.orderInformationRequest.phone.offline;
 
-		return YupDependsSchema.validateSync(
+		return YupPhoneSchema.validateSync(
 			request,
 			{abortEarly: true}
 		);
@@ -290,7 +294,7 @@ DependsBenchmarkSuite
 		;
 
 		console.log();
-		console.log('----- ', Chalk.cyanBright('"Depends" schemes'), ' -----');
+		console.log('----- ', Chalk.cyanBright('"Phone" schemes'), ' -----');
 		console.log(cliTable.toString());
 
 		console.log('--- ', Chalk.redBright('Slowest'), ' ---');
@@ -361,6 +365,22 @@ EmailBenchmarkSuite
 
 		return true;
 	})
+	.add('Yup / Async / validate', () => {
+		const request = Mocks.orderInformationRequest.email.valid;
+
+		return YupEmailSchema.validate(
+			request,
+			{abortEarly: false}
+		);
+	})
+	.add('Joi / Async / validate', () => {
+		const request = Mocks.orderInformationRequest.email.valid;
+
+		return JoiEmailSchema.validate(
+			request,
+			{abortEarly: false}
+		);
+	})
 	.on('complete', function (benches) {
 		const reports: Array<IReport> = benches.currentTarget.map((bench: Benchmark) => {
 			return {
@@ -410,7 +430,7 @@ EmailBenchmarkSuite
 		;
 
 		console.log();
-		console.log('----- ', Chalk.cyanBright('"Phone" schemes'), ' -----');
+		console.log('----- ', Chalk.cyanBright('"Email" schemes'), ' -----');
 		console.log(cliTable.toString());
 
 		console.log('--- ', Chalk.redBright('Slowest'), ' ---');

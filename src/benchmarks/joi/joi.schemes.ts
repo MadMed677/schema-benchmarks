@@ -17,6 +17,6 @@ export const JoiEmailSchema = object({
 	payMethod: string().required(),
 	email: string().when('payMethod', {
 		is: PayMethods.Offline,
-		then: string().email()
+		then: string().email().required()
 	})
 });

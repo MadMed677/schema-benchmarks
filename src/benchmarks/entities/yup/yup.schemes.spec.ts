@@ -1,5 +1,5 @@
 import {YupEmailSchema} from './yup.schemes';
-import * as Mocks from '../../mocks';
+import * as Mocks from '../../../mocks';
 import {ValidationError} from 'yup';
 
 describe('Yup schemes', () => {

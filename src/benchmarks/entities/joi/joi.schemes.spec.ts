@@ -1,5 +1,5 @@
 import {JoiEmailSchema} from './joi.schemes';
-import * as Mocks from '../../mocks';
+import * as Mocks from '../../../mocks';
 import {ValidationError} from '@hapi/joi';
 
 describe('Joi schemes', () => {

@@ -1,5 +1,5 @@
 import * as Validator from 'validator';
-import * as Mocks from '../../mocks';
+import * as Mocks from '../../../mocks';
 
 describe('Validator', () => {
 	test('should validate phoneNumber', () => {

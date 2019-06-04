@@ -1,10 +1,12 @@
+import Chalk from 'chalk';
+import {string} from 'yup';
+import * as Validator from 'validator';
+import * as Benchmark from 'benchmark';
+
 import * as Mocks from '../../mocks';
-import * as Validator from "validator";
 import {YupSimpleSchema} from '../entities/yup';
 import {JoiSimpleSchema} from '../entities/joi/joi.schemes';
 import {IReport} from '../../entities/Report';
-import * as Benchmark from 'benchmark';
-import Chalk from 'chalk';
 import {Rows, Table} from '../../entities/Tables';
 
 const SimpleBenchmarkSuite = new Benchmark.Suite('Simple');
@@ -51,6 +53,15 @@ SimpleBenchmarkSuite
 		}
 
 		return true;
+	})
+	.add('Yup / Async / validate single', () => {
+		const request = Mocks.orderInformationRequest.simple.valid;
+		const schemaString = string().required('required');
+
+		return Promise.all([
+			schemaString.isValid(request.id),
+			schemaString.isValid(request.payerAccount)
+		]);
 	})
 	.add('Yup / Async / validate', () => {
 		const request = Mocks.orderInformationRequest.simple.valid;

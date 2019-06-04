@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "./dist/",
+    "target": "ES2017",
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "lib": ["es2015", "dom"],
+    "noImplicitAny": false,
+    "moduleResolution": "node",
+    "esModuleInterop": true
+  }
+}

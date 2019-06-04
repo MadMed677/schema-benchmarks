@@ -1,5 +1,4 @@
-// @ts-ignore
-import * as CliTable from 'cli-table';
+import CliTable from 'cli-table';
 import {Rows} from './Rows/Rows';
 import {Row} from './Rows/Row';
 
